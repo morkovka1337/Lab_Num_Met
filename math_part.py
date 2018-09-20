@@ -109,4 +109,6 @@ for i in points:
     xlist.append(i['coord_x'])
     Ilist.append(i['coord_I'])
 pylab.plot(xlist, Ilist)
+pylab.axis([-2, 5, -2, 5])
+pylab.grid(True)
 pylab.show()
