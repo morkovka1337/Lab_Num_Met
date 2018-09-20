@@ -1,19 +1,13 @@
 import math
-import tkinter
+import pylab
+from matplotlib import mlab
 
 #######################################
-root = tkinter.Tk()
+mincoord_x = -3
+maxcoord_x = 8
 
-canv = tkinter.Canvas(root, width = 500, height = 500)
-mincoord_x = 10; mincoord_y = 10; maxcoord_x = 430; maxcoord_y = 430
 float(mincoord_x)
-float(maxcoord_x)
-float(mincoord_y)
-float(maxcoord_y)
-def coord(mincoord_x, mincoord_y, maxcoord_x, maxcoord_y, fil_color):
-    canv.create_line(mincoord_x, maxcoord_y, maxcoord_x, maxcoord_y, fill = fil_color, arrow = tkinter.LAST)
-    canv.create_line(mincoord_x, maxcoord_y, mincoord_x, mincoord_y, fill = fil_color, arrow = tkinter.LAST)
-   
+float(maxcoord_x)  
 
 n = int(input("Enter count repeat: "))
 L = float(input ("begin L:"))
@@ -84,16 +78,16 @@ def new_point(step, x, I):
     global new_h
     if abs(S) >= exp/16 and abs(S) <= exp:
         print("save point")
-        new_h = h
+        new_h = tmp_h
         return {'coord_I':new_I, 'coord_x':new_x}
     if abs(S) < exp/16:
         print("save point, but change step")
-        new_h = 2*h
+        new_h = 2*tmp_h
         return {'coord_I':new_I, 'coord_x':new_x}
     if abs(S) > exp:
         print("Fail")
-        curr_h = tmp_h/2
-        return new_point(curr_h, tmp_x, tmp_I)
+        tmp_h = tmp_h/2
+        return new_point(tmp_h, tmp_x, tmp_I)
 
 new_x = x0
 new_I = I0
@@ -103,20 +97,16 @@ new_h = h
 tmp_I = 0.0
 tmp_x = 0.0
 tmp_h = h
+xlist = []
+Ilist = []
 for i in range(n):
     
     points.append(new_point(new_h, new_x, new_I))
 
 for i in points:
     print(i, '\n')
-
-coord(mincoord_x, mincoord_y, maxcoord_x, maxcoord_y, 'blue')
-canv.create_line(x0 + mincoord_x, maxcoord_y - I0, x0 + mincoord_x, maxcoord_y - I0,  fill = 'black', arrow = tkinter.NONE)
-tmpcoord_x = x0
-tmpcoord_I = I0
-for point in points:
-    canv.create_line((tmpcoord_x * 100 + mincoord_x), (maxcoord_y - tmpcoord_I * 100), (point['coord_x'] * 100 + mincoord_x), (maxcoord_y - point['coord_I'] * 100), fill = 'black', arrow = tkinter.NONE)  
-    tmpcoord_x = point['coord_x']
-    tmpcoord_I = point['coord_I']
-canv.pack()
-root.mainloop()
+for i in points:
+    xlist.append(i['coord_x'])
+    Ilist.append(i['coord_I'])
+pylab.plot(xlist, Ilist)
+pylab.show()
