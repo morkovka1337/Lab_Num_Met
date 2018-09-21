@@ -8,7 +8,6 @@ maxcoord_x = 8
 
 float(mincoord_x)
 float(maxcoord_x)  
-
 n = int(input("Enter count repeat: "))
 L = float(input ("begin L:"))
 I0 = float(input ("begin I0:"))
@@ -17,8 +16,10 @@ x0 = float(input ("begin x:"))
 R = float(input ("begin R:"))
 w = float(input ("begin w:"))
 E = float(input ("begin E:"))
-exp = 0.00001
+eps = 0.00001
 points = []
+def abs_solution(x, I):
+    return ((math.exp((-(R*x))/L)*((R**2)*I + R*E*((math.exp((R*x)/L)*math.sin(w*x)))-E*L*w*((math.exp((R*x)/L))*math.cos(w*x)+E*L*w+(L**2)*(w**2)*I)/((R**2)+(L**2)*(w**2)))))
 def f(x, I):
     return (E*(math.sin(w * x)) - R * I)/L
 def loc_err(step_I, two_step_I):
@@ -73,18 +74,18 @@ def new_point(step, x, I):
     S = loc_err(new_I, new_add_I)
 
     print("S####: ", S)
-    print("exp###: ", exp/16, exp)
+    print("exp###: ", eps/16, eps)
 
     global new_h
-    if abs(S) >= exp/16 and abs(S) <= exp:
+    if abs(S) >= eps/16 and abs(S) <= eps:
         print("save point")
         new_h = tmp_h
         return {'coord_I':new_I, 'coord_x':new_x}
-    if abs(S) < exp/16:
+    if abs(S) < eps/16:
         print("save point, but change step")
         new_h = 2*tmp_h
         return {'coord_I':new_I, 'coord_x':new_x}
-    if abs(S) > exp:
+    if abs(S) > eps:
         print("Fail")
         tmp_h = tmp_h/2
         return new_point(tmp_h, tmp_x, tmp_I)
@@ -108,7 +109,12 @@ for i in points:
 for i in points:
     xlist.append(i['coord_x'])
     Ilist.append(i['coord_I'])
+
+abs_x = xlist
+abs_I = [abs_solution(x, I0) for x in abs_x]
+
 pylab.plot(xlist, Ilist)
-pylab.axis([-2, 5, -2, 5])
+pylab.plot(abs_x, abs_I)
+pylab.axis([-10, 60, -10, 60])
 pylab.grid(True)
 pylab.show()
