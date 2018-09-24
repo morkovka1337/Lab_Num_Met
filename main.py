@@ -43,6 +43,8 @@ class MyWin(QMainWindow, Ui_MainWindow):
         E = float(self.textEdit_7.toPlainText())
         w = float(self.textEdit_8.toPlainText())
         Math_Part.Math_Part.bilding(self, n, L, I0, h, x0, R, w, E)
+        #self.tableWidget.insertRow(0)
+        #self.tableWidget.setItem(0, 0, QtWidgets.QTableWidgetItem("hi"))
 
 
 if __name__=="__main__":
